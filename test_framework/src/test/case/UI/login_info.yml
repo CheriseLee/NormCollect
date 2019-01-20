@@ -1,0 +1,15 @@
+userlist:
+- username: admin
+  password: 1
+#- username: lihh
+    ##  password: 1
+  ##- username: lihh1
+  ##  password: 1
+
+erroruserlist:
+- username: admin
+  password: 11
+#- username: admin
+#  password: NULL
+#- username: admin1
+#  password: 11
