@@ -117,8 +117,59 @@ class Process:
                 sleep(1)
             driver.close()
 
+    def test_003_upmove_process(self):
+        # 登录
+        driver = webdriver.Firefox()
+        driver.get("http://47.98.217.90:9010/")
+        driver.find_element_by_id("username").send_keys("admin")
+        driver.find_element_by_id("password").send_keys("1")
+        driver.find_element_by_class_name("loginbtn").click()
+        # 选择专业
+        driver.find_element_by_class_name("m-xs").click()
+        proSelect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
+        proSelect.select_by_visible_text("测试")
+        # 选择目录树第一个节点
+        driver.find_element_by_css_selector("#treeDemo_4_span").click()
+        # 选择节点下的子目
+        normTable = driver.find_element_by_css_selector("table#dataTable>tbody")
+        normList = normTable.find_elements_by_tag_name("tr")
+        for norm in normList[1:2]:
+            element = norm.find_elements_by_tag_name("td")[0]
+            action = ActionChains(driver)
+            doubclick = action.double_click(element)
+            doubclick.perform()
+            driver.find_element_by_link_text("人工").click()
+            table = driver.find_element_by_css_selector("#wordproce")
+            # 通过标签名获取表格中的所有行对象
+            sleep(1)
+            trList = table.find_elements_by_tag_name("tr")
+            # nameList = []
+            # for key in trList:
+            #     nameList.append(key.text)
+            #     print(nameList)
+            ele = trList[len(trList)-1].find_elements_by_tag_name("td")[1]
+            name = ele.text
+            print(name)
+            ele.click()
+
+            driver.find_element_by_link_text("上移").click()
+            #
+            newTable = driver.find_element_by_css_selector("#wordproce")
+            newTrList = newTable.find_elements_by_tag_name("tr")
+            ele1 = newTrList[len(newTrList) - 2].find_elements_by_tag_name("td")[1]
+            name1 = ele1.text
+            print(name1)
+            # assert trList[len(trList)-1].text == newTrList[len(newTrList)-2].text
+            assert name==name1
+
+
+
+
+            # driver.close()
+
 if __name__ == '__main__':
     # updateNormItem()
-    Process().test_001_del_process()
+    # Process().test_001_del_process()
     # sleep(100)
-    Process().test_002_add_process()
+    # Process().test_002_add_process()
+    Process().test_003_upmove_process()
