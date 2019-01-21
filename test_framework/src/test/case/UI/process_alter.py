@@ -1,10 +1,13 @@
 from selenium import webdriver
 from time import *
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import NoAlertPresentException,TimeoutException,NoSuchElementException
 from selenium.webdriver.support import select
-driver = webdriver.Firefox()
+import selenium.webdriver.support.expected_conditions as EC
+
 class Process:
 
     def updateNormItem():
@@ -35,39 +38,87 @@ class Process:
         # totalTime=endTime-startTime
         # print(totalTime)
 
-    def test_1del_process(self):
+    def test_001_del_process(self):
+        #登录
+        driver = webdriver.Firefox()
         driver.get("http://47.98.217.90:9010/")
         driver.find_element_by_id("username").send_keys("admin")
         driver.find_element_by_id("password").send_keys("1")
         driver.find_element_by_class_name("loginbtn").click()
-
+        #选择专业
         driver.find_element_by_class_name("m-xs").click()
         proSelect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
         proSelect.select_by_visible_text("测试")
-
+        #选择目录树第一个节点
         driver.find_element_by_css_selector("#treeDemo_4_span").click()
-        driver.find_element_by_link_text("材料").click()
-        # driver.find_element_by_link_text("人工").click()
-        # driver.find_element_by_xpath('/html/body/div[2]/div/div[3]/div/div/div[2]/div[2]/div[2]/div[2]/div/table/tbody/tr/td[2]').click()
-        table = driver.find_element_by_css_selector("#materiallist")
-        # 通过标签名获取表格中的所有行对象
-        trList = table.find_elements_by_tag_name("tr")
-        #assert len(trList) == 2, "表格行数不符！"
-        # 遍历表格行对象
+        #选择节点下的子目
+        normTable = driver.find_element_by_css_selector("table#dataTable>tbody")
+        normList = normTable.find_elements_by_tag_name("tr")
+        for norm in normList[1:2]:
+            element = norm.find_elements_by_tag_name("td")[0]
+            action = ActionChains(driver)
+            doubclick = action.double_click(element)
+            doubclick.perform()
+            sleep(2)
+        # driver.find_element_by_link_text("材料").click()
+            driver.find_element_by_link_text("人工").click()
 
-            # 获取每一行中所有列对象
-        for key in trList:
-             key.find_elements_by_tag_name("td")[0].click()
-            # 遍历表格列对象
-        # 断言获取的表格行数是否等于预期
-        sleep(2)
+            table = driver.find_element_by_css_selector("#wordproce")
+            # table = driver.find_element_by_css_selector("#materiallist")
+            # 通过标签名获取表格中的所有行对象
+            trList = table.find_elements_by_tag_name("tr")
+            t = len(trList)
+            print("t"+ str(t))
+            # 遍历表格行对象
+            if t>0:
 
-        driver.quit()
+                for i in range(t - 1, -1, -1):
+                    #在获取table的行数时，总是会遇到StaleElementReferenceException异常，有解决方案如下：
+                    # 捕捉异常StaleElementReferenceException，然后重新获取元素，此方法比较靠谱
+                    trList = table.find_elements_by_tag_name("tr")
+                    trList[i].find_elements_by_tag_name("td")[0].click()
+                    driver.find_element_by_link_text("删除工序").click()
+                    driver.find_element_by_css_selector(".layui-layer-btn0").click()
+        driver.close()
+        # driver.quit() 使用driver.quit()时，调用下一个方法时报错目标计算机积极拒绝，二者区别还没弄明白
+    def test_002_add_process(self):
+        # 登录
+        driver = webdriver.Firefox()
+        driver.get("http://47.98.217.90:9010/")
+        driver.find_element_by_id("username").send_keys("admin")
+        driver.find_element_by_id("password").send_keys("1")
+        driver.find_element_by_class_name("loginbtn").click()
+        # 选择专业
+        driver.find_element_by_class_name("m-xs").click()
+        proSelect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
+        proSelect.select_by_visible_text("测试")
+        # 选择目录树第一个节点
+        driver.find_element_by_css_selector("#treeDemo_4_span").click()
+        # 选择节点下的子目
+        normTable = driver.find_element_by_css_selector("table#dataTable>tbody")
+        normList = normTable.find_elements_by_tag_name("tr")
+        for norm in normList[1:2]:
+            element = norm.find_elements_by_tag_name("td")[0]
+            action = ActionChains(driver)
+            doubclick = action.double_click(element)
+            doubclick.perform()
+            driver.find_element_by_link_text("人工").click()
 
-
-
-
+            for i in range(4):
+                driver.find_element_by_link_text("新增工序").click()
+                # 跳转到弹出的frame框架
+                iframe = driver.find_element_by_xpath("//iframe")
+                driver._switch_to.frame(iframe)
+                driver.find_element_by_xpath("//input[@name=\"procedurename\"]").send_keys("人工名称" + str(i))
+                driver.find_element_by_xpath("//input[@name=\"procedureunit\"]").send_keys("人工单位" + str(i))
+                driver.find_element_by_xpath("//input[@name=\"remark\"]").send_keys("人工备注" + str(i))
+                driver._switch_to.parent_frame()
+                driver.find_element_by_link_text('添加').click()
+                sleep(1)
+            driver.close()
 
 if __name__ == '__main__':
     # updateNormItem()
-    Process().test_1del_process()
+    Process().test_001_del_process()
+    # sleep(100)
+    Process().test_002_add_process()
