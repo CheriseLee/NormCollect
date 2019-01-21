@@ -13,6 +13,7 @@ class Process:
     def updateNormItem():
 
         sleep(2)
+        driver = webdriver.Firefox()
         driver.get("http://47.98.217.90:9010/")
         driver.find_element_by_id("username").send_keys("admin")
         driver.find_element_by_id("password").send_keys("1")
@@ -47,14 +48,14 @@ class Process:
         driver.find_element_by_class_name("loginbtn").click()
         #选择专业
         driver.find_element_by_class_name("m-xs").click()
-        proSelect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
-        proSelect.select_by_visible_text("测试")
+        proselect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
+        proselect.select_by_visible_text("测试")
         #选择目录树第一个节点
         driver.find_element_by_css_selector("#treeDemo_4_span").click()
         #选择节点下的子目
-        normTable = driver.find_element_by_css_selector("table#dataTable>tbody")
-        normList = normTable.find_elements_by_tag_name("tr")
-        for norm in normList[1:2]:
+        normtable = driver.find_element_by_css_selector("table#dataTable>tbody")
+        normlist = normtable.find_elements_by_tag_name("tr")
+        for norm in normlist[1:2]:
             element = norm.find_elements_by_tag_name("td")[0]
             action = ActionChains(driver)
             doubclick = action.double_click(element)
@@ -66,21 +67,22 @@ class Process:
             table = driver.find_element_by_css_selector("#wordproce")
             # table = driver.find_element_by_css_selector("#materiallist")
             # 通过标签名获取表格中的所有行对象
-            trList = table.find_elements_by_tag_name("tr")
-            t = len(trList)
-            print("t"+ str(t))
+            trlist = table.find_elements_by_tag_name("tr")
+            t = len(trlist)
+            print("t" + str(t))
             # 遍历表格行对象
-            if t>0:
+            if t > 0:
 
                 for i in range(t - 1, -1, -1):
                     #在获取table的行数时，总是会遇到StaleElementReferenceException异常，有解决方案如下：
                     # 捕捉异常StaleElementReferenceException，然后重新获取元素，此方法比较靠谱
-                    trList = table.find_elements_by_tag_name("tr")
-                    trList[i].find_elements_by_tag_name("td")[0].click()
+                    trlist = table.find_elements_by_tag_name("tr")
+                    trlist[i].find_elements_by_tag_name("td")[0].click()
                     driver.find_element_by_link_text("删除工序").click()
                     driver.find_element_by_css_selector(".layui-layer-btn0").click()
         driver.close()
         # driver.quit() 使用driver.quit()时，调用下一个方法时报错目标计算机积极拒绝，二者区别还没弄明白
+
     def test_002_add_process(self):
         # 登录
         driver = webdriver.Firefox()
@@ -90,14 +92,14 @@ class Process:
         driver.find_element_by_class_name("loginbtn").click()
         # 选择专业
         driver.find_element_by_class_name("m-xs").click()
-        proSelect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
-        proSelect.select_by_visible_text("测试")
+        proselect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
+        proselect.select_by_visible_text("测试")
         # 选择目录树第一个节点
         driver.find_element_by_css_selector("#treeDemo_4_span").click()
         # 选择节点下的子目
-        normTable = driver.find_element_by_css_selector("table#dataTable>tbody")
-        normList = normTable.find_elements_by_tag_name("tr")
-        for norm in normList[1:2]:
+        normtable = driver.find_element_by_css_selector("table#dataTable>tbody")
+        normlist = normtable.find_elements_by_tag_name("tr")
+        for norm in normlist[1:2]:
             element = norm.find_elements_by_tag_name("td")[0]
             action = ActionChains(driver)
             doubclick = action.double_click(element)
@@ -126,14 +128,14 @@ class Process:
         driver.find_element_by_class_name("loginbtn").click()
         # 选择专业
         driver.find_element_by_class_name("m-xs").click()
-        proSelect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
-        proSelect.select_by_visible_text("测试")
+        proselect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
+        proselect.select_by_visible_text("测试")
         # 选择目录树第一个节点
         driver.find_element_by_css_selector("#treeDemo_4_span").click()
         # 选择节点下的子目
-        normTable = driver.find_element_by_css_selector("table#dataTable>tbody")
-        normList = normTable.find_elements_by_tag_name("tr")
-        for norm in normList[1:2]:
+        normtable = driver.find_element_by_css_selector("table#dataTable>tbody")
+        normlist = normtable.find_elements_by_tag_name("tr")
+        for norm in normlist[1:2]:
             element = norm.find_elements_by_tag_name("td")[0]
             action = ActionChains(driver)
             doubclick = action.double_click(element)
@@ -142,30 +144,21 @@ class Process:
             table = driver.find_element_by_css_selector("#wordproce")
             # 通过标签名获取表格中的所有行对象
             sleep(1)
-            trList = table.find_elements_by_tag_name("tr")
-            # nameList = []
-            # for key in trList:
-            #     nameList.append(key.text)
-            #     print(nameList)
-            ele = trList[len(trList)-1].find_elements_by_tag_name("td")[1]
+            trlist = table.find_elements_by_tag_name("tr")
+            ele = trlist[len(trlist)-1].find_elements_by_tag_name("td")[1]
             name = ele.text
             print(name)
             ele.click()
 
             driver.find_element_by_link_text("上移").click()
             #
-            newTable = driver.find_element_by_css_selector("#wordproce")
-            newTrList = newTable.find_elements_by_tag_name("tr")
-            ele1 = newTrList[len(newTrList) - 2].find_elements_by_tag_name("td")[1]
+            newtable = driver.find_element_by_css_selector("#wordproce")
+            newtrlist = newtable.find_elements_by_tag_name("tr")
+            ele1 = newtrlist[len(newtrlist) - 2].find_elements_by_tag_name("td")[1]
             name1 = ele1.text
             print(name1)
-            # assert trList[len(trList)-1].text == newTrList[len(newTrList)-2].text
-            assert name==name1
-
-
-
-
-            # driver.close()
+            assert name == name1
+            driver.close()
 
 if __name__ == '__main__':
     # updateNormItem()
