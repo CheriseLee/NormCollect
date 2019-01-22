@@ -117,20 +117,25 @@ class Process:
                 driver._switch_to.parent_frame()
                 driver.find_element_by_link_text('添加').click()
                 sleep(1)
-            driver.close()
+            # driver.close()
 
     def test_003_upmove_process(self):
         # 登录
         driver = webdriver.Firefox()
+        # driver = webdriver.Ie()
         driver.get("http://47.98.217.90:9010/")
         driver.find_element_by_id("username").send_keys("admin")
         driver.find_element_by_id("password").send_keys("1")
         driver.find_element_by_class_name("loginbtn").click()
+        # 元素显示等待
+        locator = (By.CLASS_NAME, 'm-xs')
+        element = WebDriverWait(driver, 5, 0.5).until(expected_conditions.presence_of_element_located(locator))
+        element.click()
         # 选择专业
-        driver.find_element_by_class_name("m-xs").click()
         proselect = select.Select(driver.find_element_by_css_selector("[id='trade']"))
         proselect.select_by_visible_text("测试")
         # 选择目录树第一个节点
+        sleep(2)
         driver.find_element_by_css_selector("#treeDemo_4_span").click()
         # 选择节点下的子目
         normtable = driver.find_element_by_css_selector("table#dataTable>tbody")
@@ -151,14 +156,14 @@ class Process:
             ele.click()
 
             driver.find_element_by_link_text("上移").click()
-            #
+
             newtable = driver.find_element_by_css_selector("#wordproce")
             newtrlist = newtable.find_elements_by_tag_name("tr")
             ele1 = newtrlist[len(newtrlist) - 2].find_elements_by_tag_name("td")[1]
             name1 = ele1.text
             print(name1)
-            assert name == name1
-            driver.close()
+            # assert name == name1
+            # driver.close()
 
 if __name__ == '__main__':
     # updateNormItem()

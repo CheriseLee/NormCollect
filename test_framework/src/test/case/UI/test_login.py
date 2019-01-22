@@ -3,8 +3,8 @@
 import unittest
 import os
 import yaml
-import myunit
-from Page.LoginPage import *
+import myunit,drivers,function
+from LoginPage import *
 from selenium.common.exceptions import NoSuchElementException
 
 
@@ -12,8 +12,14 @@ class LoginTest(myunit.StartEnd):
     def test_login1_normal(self):
         print('test login1_ normal is start run...')
         po = LoginPage(self.driver)
-        dir_path = os.path.abspath('.')
-        f = open(dir_path + "\\login_info.yml", 'r')
+        dir_path = os.getcwd()
+        print(dir_path)
+        path1 = os.path.abspath('')
+        print(path1)
+        path2 = os.path.abspath('login_info.yml')
+        print(path2)
+        # f = open(dir_path + "\\login_info.yml", 'r')
+        f = open(path2, 'r')
         datas = yaml.load(f)
         for key in datas['userlist']:
             po.login_action(key['username'], key['password'])
@@ -22,29 +28,29 @@ class LoginTest(myunit.StartEnd):
         assert (self.driver.find_element_by_class_name("m-xs").is_displayed() == True)
         print("test_login1_normal is test end!")
 
-    def test_login2_error(self):
-        'username is ok,password is error'
-        print('test login_password Error is start run...')
-        po = LoginPage(self.driver)
-        dir_path = os.path.abspath('.')
-        f = open(dir_path + "\\login_info.yml", 'r')
-        datas = yaml.load(f)
-        for key in datas['erroruserlist']:
-            po.login_action(key['username'], key['password'])
-        sleep(3)
-        f.close()
-
-        # self.assertEqual(po.type_loginFail_hint(), '')
-        # function.insert_img(self.driver, "51zxw_login2_fail.png")
-        assert (self.driver.find_element_by_id("username").is_displayed() == True)
-        print("test_login2_passwordError is test end!")
-
-    def test_login_empty(self):
-        '''username and password is empty'''
-        print('test login3_empty is start run...')
-        po = LoginPage(self.driver)
-        po.login_action('', '')
-        sleep(3)
+    # def test_login2_error(self):
+    #     'username is ok,password is error'
+    #     print('test login_password Error is start run...')
+    #     po = LoginPage(self.driver)
+    #     dir_path = os.getcwd()
+    #     f = open(dir_path + "\\login_info.yml", 'r')
+    #     datas = yaml.load(f)
+    #     for key in datas['erroruserlist']:
+    #         po.login_action(key['username'], key['password'])
+    #     sleep(3)
+    #     f.close()
+    #
+    #     # self.assertEqual(po.type_loginFail_hint(), '')
+    #     # function.insert_img(self.driver, "51zxw_login2_fail.png")
+    #     assert (self.driver.find_element_by_id("username").is_displayed() == True)
+    #     print("test_login2_passwordError is test end!")
+    #
+    # def test_login_empty(self):
+    #     '''username and password is empty'''
+    #     print('test login3_empty is start run...')
+    #     po = LoginPage(self.driver)
+    #     po.login_action('', '')
+    #     sleep(3)
 
 
         # self.assertEqual(po.type_loginFail_hint(), '')

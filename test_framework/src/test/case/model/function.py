@@ -23,7 +23,6 @@ def insert_img(driver, filename):
 
 #获取最新报告
 def latest_report(filepath):
-    # report_dir = r'C:\Users\Yuexl\Documents\GitHub\SeleniumLesson\trunk\unittestlihh\testreport'
     report_dir = filepath
     #返回指定的文件夹中的文件列表
     lists = os.listdir(report_dir)
