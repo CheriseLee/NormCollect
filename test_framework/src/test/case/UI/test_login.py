@@ -7,6 +7,7 @@ import myunit,drivers,function
 from LoginPage import *
 from selenium.common.exceptions import NoSuchElementException
 
+current_path = os.path.dirname(__file__)#使用不同py文件保证引文的文件路径固定
 
 class LoginTest(myunit.StartEnd):
     def test_login1_normal(self):
@@ -18,8 +19,7 @@ class LoginTest(myunit.StartEnd):
         print(path1)
         path2 = os.path.abspath('login_info.yml')
         print(path2)
-        # f = open(dir_path + "\\login_info.yml", 'r')
-        f = open(path2, 'r')
+        f = open(current_path + "\\login_info.yml", 'r')
         datas = yaml.load(f)
         for key in datas['userlist']:
             po.login_action(key['username'], key['password'])
