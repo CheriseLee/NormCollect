@@ -29,10 +29,10 @@ def latest_report(filepath):
     #按时间顺序对文件排序
     lists.sort(key=lambda fn:os.path.getatime(report_dir+'\\'))
     print(lists)
-    print("latest report is:"+lists[-2])
+    print("latest report is:"+lists[-1])
 
     #输出最新报告路径
-    file = os.path.join(report_dir,lists[-2])
+    file = os.path.join(report_dir,lists[-1])
     return file
 
 #发送邮件
