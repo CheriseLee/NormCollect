@@ -39,7 +39,7 @@ class Process(myunit.StartEnd):
         # totalTime=endTime-startTime
         # print(totalTime)
 
-    def test_001_del_process(self):
+    def t1est_001_del_process(self):
         # 登录
         po = LoginPage(self.driver)
         po.login_action('admin', '1')
@@ -56,19 +56,19 @@ class Process(myunit.StartEnd):
         #选择节点下的子目
         normtable = self.driver.find_element_by_css_selector("table#dataTable>tbody")
         normlist = normtable.find_elements_by_tag_name("tr")
-        for norm in normlist[1:2]:
+        for norm in normlist[2:3]:
             element = norm.find_elements_by_tag_name("td")[0]
             action = ActionChains(self.driver)
             doubclick = action.double_click(element)
             doubclick.perform()
             sleep(2)
             Process.del_worker_process(self)
-            # Process.del_material_process(self)
-            # Process.del_machine_process(self)
+            Process.del_material_process(self)
+            Process.del_machine_process(self)
 
 
 
-    def te1st_002_add_process(self):
+    def test_002_add_process(self):
         # 登录
         po = LoginPage(self.driver)
         po.login_action('admin', '1')
@@ -95,15 +95,15 @@ class Process(myunit.StartEnd):
         # 选择节点下的子目
         normtable = self.driver.find_element_by_css_selector("table#dataTable>tbody")
         normlist = normtable.find_elements_by_tag_name("tr")
-        for norm in normlist[1:2]:
+        for norm in normlist[2:3]:
             element = norm.find_elements_by_tag_name("td")[0]
             action = ActionChains(self.driver)
             doubclick = action.double_click(element)
             doubclick.perform()
             # Process.add_worker_process(self,'人工')
             #添加材料的语句firefox运行失败，提示客户端中断连接10053，google运行没问题
-            # Process.add_material_process(self,'材料')
-            Process.add_machine_process(self,'机械')
+            Process.add_material_process(self,'材料')
+            # Process.add_machine_process(self,'机械')
 
 
     def t1est_003_upmove_process(self):
@@ -165,10 +165,10 @@ class Process(myunit.StartEnd):
         self.driver.find_element_by_link_text("材料").click()
         for i in range(4):
             sleep(5)
-            try:
-                self.driver.find_element_by_xpath('//*[@id="tab-2"]/div/div[1]/a[1]').click()
-            except(ConnectionAbortedError):
-                print("ds")
+            # try:
+            self.driver.find_element_by_xpath('//*[@id="tab-2"]/div/div[1]/a[1]').click()
+            # except(ConnectionAbortedError):
+            #     print("ds")
 
             # self.driver.find_element_by_partial_link_text("新增材料").click()
             # locator = self.driver.find_element_by_xpath('//*[@id="tab-2"]/div/div[1]/a[1]')
@@ -210,13 +210,13 @@ class Process(myunit.StartEnd):
             for i in range(t - 1, -1, -1):
                 # 在获取table的行时，总是会遇到StaleElementReferenceException异常，有解决方案如下：
                 # 捕捉异常StaleElementReferenceException，然后重新获取元素，此方法比较靠谱
-                sleep(3)
+
                 trlist = table.find_elements_by_tag_name("tr")
-                sleep(3)
+
                 trlist[i].find_elements_by_tag_name("td")[1].click()
-                sleep(3)
+
                 self.driver.find_element_by_link_text("删除工序").click()
-                sleep(3)
+
                 self.driver.find_element_by_css_selector(".layui-layer-btn0").click()
     # driver.quit() 使用driver.quit()时，调用下一个方法时报错目标计算机积极拒绝，二者区别还没弄明白
 
@@ -231,13 +231,13 @@ class Process(myunit.StartEnd):
             for i in range(t - 1, -1, -1):
                 # 在获取table的行时，总是会遇到StaleElementReferenceException异常，有解决方案如下：
                 # 捕捉异常StaleElementReferenceException，然后重新获取元素，此方法比较靠谱
-                sleep(3)
+
                 trlist = table.find_elements_by_tag_name("tr")
-                sleep(3)
+
                 trlist[i].find_elements_by_tag_name("td")[0].click()
-                sleep(3)
+
                 self.driver.find_element_by_link_text("删除材料").click()
-                sleep(3)
+
                 self.driver.find_element_by_css_selector(".layui-layer-btn0").click()
     def del_machine_process(self):
         self.driver.find_element_by_link_text("机械").click()
@@ -250,17 +250,17 @@ class Process(myunit.StartEnd):
             for i in range(t - 1, -1, -1):
                 # 在获取table的行时，总是会遇到StaleElementReferenceException异常，有解决方案如下：
                 # 捕捉异常StaleElementReferenceException，然后重新获取元素，此方法比较靠谱
-                sleep(3)
+
                 trlist = table.find_elements_by_tag_name("tr")
-                sleep(3)
+
                 trlist[i].find_elements_by_tag_name("td")[0].click()
-                sleep(3)
+
                 self.driver.find_element_by_link_text("删除机械").click()
-                sleep(3)
+
                 self.driver.find_element_by_css_selector(".layui-layer-btn0").click()
 
 if __name__ == '__main__':
     # updateNormItem()
     Process().test_001_del_process()
-    # Process().test_002_add_process()
+    Process().test_002_add_process()
     # Process().test_003_upmove_process()
